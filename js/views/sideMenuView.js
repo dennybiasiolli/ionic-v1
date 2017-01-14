@@ -12,6 +12,7 @@
       this.isEnabled = (typeof opts.isEnabled === 'undefined') ? true : opts.isEnabled;
       this.setWidth(opts.width);
       this.displayType = (typeof opts.displayType === 'undefined') ? 'push' : opts.displayType;
+      this.leaveContentActive = (typeof opts.leaveContentActive === 'undefined') ? false : opts.leaveContentActive;
     },
     getFullWidth: function() {
       return this.width;
@@ -49,7 +50,10 @@
     },
     setTranslateX: ionic.animationFrameThrottle(function(x) {
       this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + x + 'px, 0, 0)';
-    })
+    }),
+    setLeaveContentActive: function(leaveContentActive) {
+      this.leaveContentActive = leaveContentActive;
+    }
   });
 
   ionic.views.SideMenuContent = ionic.views.View.inherit({
