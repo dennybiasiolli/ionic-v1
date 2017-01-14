@@ -14,7 +14,8 @@
  *   side="left"
  *   width="myWidthValue + 20"
  *   is-enabled="shouldLeftSideMenuBeEnabled()"
- *   display-type="push">
+ *   display-type="push"
+ *   leave-content-active="shouldLeftSideMenuLeaveMainContentActive()">
  * </ion-side-menu>
  * ```
  * For a complete side menu example, see the
@@ -24,6 +25,7 @@
  * @param {boolean=} is-enabled Whether this side menu is enabled.
  * @param {number=} width How many pixels wide the side menu should be.  Defaults to 275.
  * @param {string} display-type Which type of display the menu should have.  Allowed values: 'push' or 'overlay'.  Defaults to 'push'.
+ * @param {boolean=} leave-content-active Whether this menu should leave main content active when menu is opened.  Defaults to false.
  */
 IonicModule
 .directive('ionSideMenu', function() {
@@ -35,6 +37,7 @@ IonicModule
       angular.isUndefined(attr.isEnabled) && attr.$set('isEnabled', 'true');
       angular.isUndefined(attr.width) && attr.$set('width', '275');
       angular.isUndefined(attr.displayType) && attr.$set('displayType', 'push');
+      angular.isUndefined(attr.leaveContentActive) && attr.$set('leaveContentActive', 'false');
 
       element.addClass('menu menu-' + attr.side);
       if (attr.displayType == 'overlay') {
@@ -50,7 +53,8 @@ IonicModule
           width: attr.width,
           el: $element[0],
           isEnabled: true,
-          displayType: attr.displayType
+          displayType: attr.displayType,
+          leaveContentActive: false
         });
 
         $scope.$watch($attr.width, function(val) {
@@ -66,6 +70,9 @@ IonicModule
           if (val == 'push' || val == 'overlay') {
             sideMenu.setDisplayType(val);
           }
+        });
+        $scope.$watch($attr.leaveContentActive, function(val) {
+          sideMenu.setLeaveContentActive(!!val);
         });
       };
     }
