@@ -81,6 +81,18 @@ describe('$ionicSideMenus controller', function() {
     expect(ctrl.right.displayType).toEqual('push');
   });
 
+  // Menu leaveContentActive
+  it('should set leaveContentActive', function() {
+    ctrl.left.setLeaveContentActive(true);
+    ctrl.right.setLeaveContentActive(true);
+    expect(ctrl.left.leaveContentActive).toEqual(true);
+    expect(ctrl.right.leaveContentActive).toEqual(true);
+    ctrl.left.setLeaveContentActive(false);
+    ctrl.right.setLeaveContentActive(false);
+    expect(ctrl.left.leaveContentActive).toEqual(false);
+    expect(ctrl.right.leaveContentActive).toEqual(false);
+  });
+
   // Menu widths
   it('should init widths', function() {
     expect(ctrl.left.width).toEqual(272);
