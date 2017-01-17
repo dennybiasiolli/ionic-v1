@@ -3108,7 +3108,7 @@ function tapIgnoreEvent(e) {
     return true;
   }
 
-  if(e.target.tagName == 'SELECT') {
+  if(e.target && e.target.tagName == 'SELECT') {
     return true;
   }
 
@@ -8239,6 +8239,8 @@ ionic.scroll = {
       this.el = opts.el;
       this.isEnabled = (typeof opts.isEnabled === 'undefined') ? true : opts.isEnabled;
       this.setWidth(opts.width);
+      this.displayType = (typeof opts.displayType === 'undefined') ? 'push' : opts.displayType;
+      this.leaveContentActive = (typeof opts.leaveContentActive === 'undefined') ? false : opts.leaveContentActive;
     },
     getFullWidth: function() {
       return this.width;
@@ -8259,6 +8261,26 @@ ionic.scroll = {
       if(this.el.style.zIndex !== '-1') {
         this.el.style.zIndex = '-1';
       }
+    },
+    setDisplayType: function(displayType) {
+      this.displayType = displayType;
+    },
+    enableAnimation: function() {
+      this.animationEnabled = true;
+      this.el.classList.add('menu-animated');
+    },
+    disableAnimation: function() {
+      this.animationEnabled = false;
+      this.el.classList.remove('menu-animated');
+    },
+    getTranslateX: function() {
+      return parseFloat(this.el.style[ionic.CSS.TRANSFORM].replace('translate3d(', '').split(',')[0]);
+    },
+    setTranslateX: ionic.animationFrameThrottle(function(x) {
+      this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + x + 'px, 0, 0)';
+    }),
+    setLeaveContentActive: function(leaveContentActive) {
+      this.leaveContentActive = leaveContentActive;
     }
   });
 
@@ -60762,7 +60784,7 @@ IonicModule
   '$rootScope',
 function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $ionicHistory, $ionicScrollDelegate, IONIC_BACK_PRIORITY, $rootScope) {
   var self = this;
-  var rightShowing, leftShowing, isDragging;
+  var isDragging;
   var startX, lastX, offsetX, isAsideExposed;
   var enableMenuWithBackViews = true;
 
@@ -60812,7 +60834,11 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
     if (arguments.length === 0) {
       shouldOpen = openAmount <= 0;
     }
-    self.content.enableAnimation();
+    if (self.left.displayType == 'overlay') {
+      self.left.enableAnimation();
+    } else {
+      self.content.enableAnimation();
+    }
     if (!shouldOpen) {
       self.openPercentage(0);
       $rootScope.$emit('$ionicSideMenuClose', 'left');
@@ -60831,7 +60857,11 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
     if (arguments.length === 0) {
       shouldOpen = openAmount >= 0;
     }
-    self.content.enableAnimation();
+    if (self.right.displayType == 'overlay') {
+      self.right.enableAnimation();
+    } else {
+      self.content.enableAnimation();
+    }
     if (!shouldOpen) {
       self.openPercentage(0);
       $rootScope.$emit('$ionicSideMenuClose', 'right');
@@ -60862,7 +60892,17 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
    * @return {float} The amount the side menu is open, either positive or negative for left (positive), or right (negative)
    */
   self.getOpenAmount = function() {
-    return self.content && self.content.getTranslateX() || 0;
+    var retOpenAmount = 0;
+    if ((isNaN(retOpenAmount) || retOpenAmount === 0) && self.right && self.right.displayType == 'overlay') {
+      retOpenAmount = self.right.getTranslateX();
+    }
+    if ((isNaN(retOpenAmount) || retOpenAmount === 0) && self.left && self.left.displayType == 'overlay') {
+      retOpenAmount = self.left.getTranslateX();
+    }
+    if ((isNaN(retOpenAmount) || retOpenAmount === 0) && self.content) {
+      retOpenAmount = self.content.getTranslateX();
+    }
+    return retOpenAmount;
   };
 
   /**
@@ -60897,18 +60937,21 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
    */
   self.openPercentage = function(percentage) {
     var p = percentage / 100;
+    var leaveContentActive = false;
 
     if (self.left && percentage >= 0) {
       self.openAmount(self.left.width * p);
+      leaveContentActive = self.left.leaveContentActive;
     } else if (self.right && percentage < 0) {
       self.openAmount(self.right.width * p);
+      leaveContentActive = self.right.leaveContentActive;
     }
 
-    // add the CSS class "menu-open" if the percentage does not
-    // equal 0, otherwise remove the class from the body element
-    $ionicBody.enableClass((percentage !== 0), 'menu-open');
+    // add the CSS class "menu-open" if don't want to leave content active and the
+    // percentage does not equal 0, otherwise remove the class from the body element
+    $ionicBody.enableClass((!leaveContentActive && percentage !== 0), 'menu-open');
 
-    self.content.setCanScroll(percentage == 0);
+    self.content.setCanScroll(leaveContentActive || percentage == 0);
   };
 
   /*
@@ -60932,6 +60975,18 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
     var maxLeft = self.left && self.left.width || 0;
     var maxRight = self.right && self.right.width || 0;
 
+    var overlayLeft = self.left && self.left.displayType == 'overlay' || false;
+    var overlayRight = self.right && self.right.displayType == 'overlay' || false;
+    var openLeft = overlayLeft && self.left.getTranslateX() || 0;
+    var openRight = overlayRight && self.right.getTranslateX() || 0;
+    var openContent = self.content.getTranslateX() || 0;
+
+    if (amount > maxLeft) {
+      amount = maxLeft;
+    } else if (amount < -maxRight) {
+      amount = -maxRight;
+    }
+
     // Check if we can move to that side, depending if the left/right panel is enabled
     if (!(self.left && self.left.isEnabled) && amount > 0) {
       self.content.setTranslateX(0);
@@ -60943,31 +60998,30 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
       return;
     }
 
-    if (leftShowing && amount > maxLeft) {
-      self.content.setTranslateX(maxLeft);
-      return;
+    if (amount > 0) {
+      if (overlayLeft) { self.left.setTranslateX(amount); }
+      if (overlayRight && openRight) { self.right.setTranslateX(0); }
+      if (!(overlayLeft && openLeft)) { self.content.setTranslateX(overlayLeft ? 0 : amount); }
+    } else if (amount < 0) {
+      if (overlayRight) { self.right.setTranslateX(amount); }
+      if (overlayLeft && openLeft) { self.left.setTranslateX(0); }
+      if (!(overlayRight && openRight)) { self.content.setTranslateX(overlayRight ? 0 : amount); }
+    } else /* if (amount === 0) */ {
+      if (overlayLeft && openLeft) { self.left.setTranslateX(amount); }
+      if (overlayRight && openRight) { self.right.setTranslateX(amount); }
+      if (!(overlayRight && openRight) && openContent) { self.content.setTranslateX(amount); }
     }
-
-    if (rightShowing && amount < -maxRight) {
-      self.content.setTranslateX(-maxRight);
-      return;
-    }
-
-    self.content.setTranslateX(amount);
-
-    leftShowing = amount > 0;
-    rightShowing = amount < 0;
 
     if (amount > 0) {
       // Push the z-index of the right menu down
-      self.right && self.right.pushDown && self.right.pushDown();
+      self.right && self.right.displayType != 'overlay' && self.right.pushDown && self.right.pushDown();
       // Bring the z-index of the left menu up
-      self.left && self.left.bringUp && self.left.bringUp();
+      self.left && self.left.displayType != 'overlay' && self.left.bringUp && self.left.bringUp();
     } else {
       // Bring the z-index of the right menu up
-      self.right && self.right.bringUp && self.right.bringUp();
+      self.right && self.right.displayType != 'overlay' && self.right.bringUp && self.right.bringUp();
       // Push the z-index of the left menu down
-      self.left && self.left.pushDown && self.left.pushDown();
+      self.left && self.left.displayType != 'overlay' && self.left.pushDown && self.left.pushDown();
     }
   };
 
@@ -61099,6 +61153,12 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
       isDragging = true;
       // Initialize dragging
       self.content.disableAnimation();
+      if (self.left.displayType == 'overlay') {
+        self.left.disableAnimation();
+      }
+      if (self.right.displayType == 'overlay') {
+        self.right.disableAnimation();
+      }
       offsetX = self.getOpenAmount();
     }
 
@@ -61127,6 +61187,14 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
       }
     }
     return self.edgeThresholdEnabled;
+  };
+
+  $scope.closeMenuOnTap = true;
+  self.closeMenuOnTap = function(closeMenu) {
+    if (arguments.length) {
+      $scope.closeMenuOnTap = !!closeMenu;
+    }
+    return $scope.closeMenuOnTap;
   };
 
   self.isDraggableTarget = function(e) {
@@ -65841,7 +65909,9 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
  * <ion-side-menu
  *   side="left"
  *   width="myWidthValue + 20"
- *   is-enabled="shouldLeftSideMenuBeEnabled()">
+ *   is-enabled="shouldLeftSideMenuBeEnabled()"
+ *   display-type="push"
+ *   leave-content-active="shouldLeftSideMenuLeaveMainContentActive()">
  * </ion-side-menu>
  * ```
  * For a complete side menu example, see the
@@ -65850,6 +65920,8 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
  * @param {string} side Which side the side menu is currently on.  Allowed values: 'left' or 'right'.
  * @param {boolean=} is-enabled Whether this side menu is enabled.
  * @param {number=} width How many pixels wide the side menu should be.  Defaults to 275.
+ * @param {string} display-type Which type of display the menu should have.  Allowed values: 'push' or 'overlay'.  Defaults to 'push'.
+ * @param {boolean=} leave-content-active Whether this menu should leave main content active when menu is opened.  Defaults to false.
  */
 IonicModule
 .directive('ionSideMenu', function() {
@@ -65860,8 +65932,15 @@ IonicModule
     compile: function(element, attr) {
       angular.isUndefined(attr.isEnabled) && attr.$set('isEnabled', 'true');
       angular.isUndefined(attr.width) && attr.$set('width', '275');
+      angular.isUndefined(attr.displayType) && attr.$set('displayType', 'push');
+      angular.isUndefined(attr.leaveContentActive) && attr.$set('leaveContentActive', 'false');
 
       element.addClass('menu menu-' + attr.side);
+      if (attr.displayType == 'overlay') {
+        element.addClass('menu-animated');
+        element[0].style[attr.side] = '-' + attr.width + 'px';
+        element[0].style.zIndex = 2147483647; // top most, maximum zIndex value
+      }
 
       return function($scope, $element, $attr, sideMenuCtrl) {
         $scope.side = $attr.side || 'left';
@@ -65869,7 +65948,9 @@ IonicModule
         var sideMenu = sideMenuCtrl[$scope.side] = new ionic.views.SideMenu({
           width: attr.width,
           el: $element[0],
-          isEnabled: true
+          isEnabled: true,
+          displayType: attr.displayType,
+          leaveContentActive: false
         });
 
         $scope.$watch($attr.width, function(val) {
@@ -65881,11 +65962,18 @@ IonicModule
         $scope.$watch($attr.isEnabled, function(val) {
           sideMenu.setIsEnabled(!!val);
         });
+        $scope.$watch($attr.displayType, function(val) {
+          if (val == 'push' || val == 'overlay') {
+            sideMenu.setDisplayType(val);
+          }
+        });
+        $scope.$watch($attr.leaveContentActive, function(val) {
+          sideMenu.setLeaveContentActive(!!val);
+        });
       };
     }
   };
 });
-
 
 /**
  * @ngdoc directive
@@ -65902,7 +65990,8 @@ IonicModule
  * ```html
  * <ion-side-menu-content
  *   edge-drag-threshold="true"
- *   drag-content="true">
+ *   drag-content="true"
+ *   close-menu-on-tap="true">
  * </ion-side-menu-content>
  * ```
  * For a complete side menu example, see the
@@ -65913,6 +66002,7 @@ IonicModule
    *  - If a non-zero number is given, that many pixels is used as the maximum allowed distance from the edge that starts dragging the side menu.
    *  - If true is given, the default number of pixels (25) is used as the maximum allowed distance.
    *  - If false or 0 is given, the edge drag threshold is disabled, and dragging from anywhere on the content is allowed.
+ * @param {boolean=} close-menu-on-tap Whether the content tap should close side menus.  Default true.
  *
  */
 IonicModule
@@ -65948,9 +66038,15 @@ function($timeout, $ionicGesture, $window) {
           });
         }
 
+        if (isDefined(attr.closeMenuOnTap)) {
+          $scope.$watch(attr.closeMenuOnTap, function(value) {
+            sideMenuCtrl.closeMenuOnTap(value);
+          });
+        }
+
         // Listen for taps on the content to close the menu
         function onContentTap(gestureEvt) {
-          if (sideMenuCtrl.getOpenAmount() !== 0) {
+          if (sideMenuCtrl.closeMenuOnTap() && sideMenuCtrl.getOpenAmount() !== 0) {
             sideMenuCtrl.close();
             gestureEvt.gesture.srcEvent.preventDefault();
             startCoord = null;
