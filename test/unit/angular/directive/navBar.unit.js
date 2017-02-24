@@ -135,7 +135,7 @@ describe('ionNavBar', function() {
 
     it('should register with $ionicNavBarDelegate', inject(function($ionicNavBarDelegate) {
       var deregisterSpy = jasmine.createSpy('deregister');
-      spyOn($ionicNavBarDelegate, '_registerInstance').andCallFake(function() {
+      spyOn($ionicNavBarDelegate, '_registerInstance').and.callFake(function() {
         return deregisterSpy;
       });
 

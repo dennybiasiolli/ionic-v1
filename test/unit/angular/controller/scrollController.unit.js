@@ -33,7 +33,7 @@ describe('$ionicScroll Controller', function() {
     it('should register with no handle', inject(function ($ionicScrollDelegate) {
       nativeScrolling = nativeScrollingSetting;
       var deregisterSpy = jasmine.createSpy('deregister');
-      spyOn($ionicScrollDelegate, '_registerInstance').andCallFake(function(){
+      spyOn($ionicScrollDelegate, '_registerInstance').and.callFake(function(){
         return deregisterSpy;
       });
       var el = setup();
@@ -43,7 +43,7 @@ describe('$ionicScroll Controller', function() {
     it('should register with given handle and deregister on destroy', inject(function ($ionicScrollDelegate) {
       nativeScrolling = nativeScrollingSetting;
       var deregisterSpy = jasmine.createSpy('deregister');
-      spyOn($ionicScrollDelegate, '_registerInstance').andCallFake(function () {
+      spyOn($ionicScrollDelegate, '_registerInstance').and.callFake(function () {
         return deregisterSpy;
       });
       setup({
@@ -67,7 +67,7 @@ describe('$ionicScroll Controller', function() {
     });
     it('should set bouncing false if isAndroid true', function () {
       nativeScrolling = nativeScrollingSetting;
-      spyOn(ionic.Platform, 'isAndroid').andCallFake(function () {
+      spyOn(ionic.Platform, 'isAndroid').and.callFake(function () {
         return true;
       });
       setup();
@@ -75,7 +75,7 @@ describe('$ionicScroll Controller', function() {
     });
     it('should set bouncing true if android false', function () {
       nativeScrolling = nativeScrollingSetting;
-      spyOn(ionic.Platform, 'isAndroid').andCallFake(function () {
+      spyOn(ionic.Platform, 'isAndroid').and.callFake(function () {
         return false;
       });
       setup();
@@ -121,13 +121,13 @@ describe('$ionicScroll Controller', function() {
 
       ionic.trigger('scroll', {target: ctrl.element});
       expect(scope.$onScroll).toHaveBeenCalled();
-      expect(scope.$onScroll.mostRecentCall.args[0].scrollLeft).toBe(0);
-      expect(scope.$onScroll.mostRecentCall.args[0].scrollTop).toBe(0);
+      expect(scope.$onScroll.calls.argsFor(0)[0].scrollLeft).toBe(0);
+      expect(scope.$onScroll.calls.argsFor(0)[0].scrollTop).toBe(0);
 
-      scope.$onScroll.reset();
+      scope.$onScroll.calls.reset();
       ionic.trigger('scroll', {target: ctrl.element, scrollTop: 3, scrollLeft: 4});
-      expect(scope.$onScroll.mostRecentCall.args[0].scrollLeft).toBe(4);
-      expect(scope.$onScroll.mostRecentCall.args[0].scrollTop).toBe(3);
+      expect(scope.$onScroll.calls.argsFor(0)[0].scrollLeft).toBe(4);
+      expect(scope.$onScroll.calls.argsFor(0)[0].scrollTop).toBe(3);
     });
 
     it('.getScrollView', function () {
@@ -139,7 +139,7 @@ describe('$ionicScroll Controller', function() {
       nativeScrolling = nativeScrollingSetting;
       setup();
       var values = {};
-      spyOn(ctrl.scrollView, 'getValues').andReturn(values);
+      spyOn(ctrl.scrollView, 'getValues').and.returnValue(values);
       expect(ctrl.getScrollPosition()).toBe(values);
     });
 
@@ -166,7 +166,7 @@ describe('$ionicScroll Controller', function() {
           });
           it('.scrollBottom', function () {
             spyOn(ctrl.scrollView, 'scrollTo');
-            spyOn(ctrl.scrollView, 'getScrollMax').andCallFake(function () {
+            spyOn(ctrl.scrollView, 'getScrollMax').and.callFake(function () {
               return {left: 33, top: 44};
             });
             ctrl.scrollBottom(shouldAnimate);
@@ -203,7 +203,7 @@ describe('$ionicScroll Controller', function() {
             expect(ctrl.scrollView.scrollTo).toHaveBeenCalledWith(0, 0, shouldAnimate);
           }));
           it('.anchorScroll with el matching hash should scroll to it', inject(function ($location, $document) {
-            $document[0].getElementById = jasmine.createSpy('byId').andCallFake(function () {
+            $document[0].getElementById = jasmine.createSpy('byId').and.callFake(function () {
               return {
                 offsetLeft: 8,
                 offsetTop: 9,
@@ -211,7 +211,7 @@ describe('$ionicScroll Controller', function() {
                 offsetParent: {}
               };
             });
-            spyOn($location, 'hash').andCallFake(function () {
+            spyOn($location, 'hash').and.callFake(function () {
               return 'foo';
             });
             spyOn(ctrl.scrollView, 'scrollTo');
@@ -250,13 +250,14 @@ describe('$ionicScroll Controller', function() {
           $element: jqLite('<div><div></div></div>'),
           scrollViewOptions: {el: jqLite('<div><div></div></div>')[0]}
         });
-        spyOn($location, 'hash').andCallFake(function () {
+        spyOn($location, 'hash').and.callFake(function () {
           return 'bar';
         });
         spyOn(scrollCtrl.scrollView, 'scrollTo');
         scrollCtrl.anchorScroll()
         $timeout.flush();
-        expect(scrollCtrl.scrollView.scrollTo.mostRecentCall.args).toEqual([18, 20, false]);
+        expect(scrollCtrl.scrollView.scrollTo).toHaveBeenCalledWith(18, 20, false);
+        expect(scrollCtrl.scrollView.scrollTo).toHaveBeenCalledWith(18, 20, false);
       });
     });
 
@@ -286,7 +287,7 @@ describe('$ionicScroll Controller', function() {
     $compile(ctrl.element)(scope);
     scope.$apply();
 
-    spyOn(ctrl.scrollView, 'activatePullToRefresh').andCallFake(function(height, start, done, refreshing,  show, hide, tail, onPull) {
+    spyOn(ctrl.scrollView, 'activatePullToRefresh').and.callFake(function(height, start, done, refreshing,  show, hide, tail, onPull) {
       activateCB = start;
       deactivateCB = done;
       startCB = refreshing;

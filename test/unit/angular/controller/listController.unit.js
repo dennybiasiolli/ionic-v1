@@ -22,7 +22,7 @@ describe('$ionicList controller', function() {
 
   it('should register with given handle and deregister on destroy', inject(function($ionicListDelegate) {
     var deregisterSpy = jasmine.createSpy('deregister');
-    spyOn($ionicListDelegate, '_registerInstance').andCallFake(function() {
+    spyOn($ionicListDelegate, '_registerInstance').and.callFake(function() {
       return deregisterSpy;
     });
     var ctrl = setup({

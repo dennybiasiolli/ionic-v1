@@ -31,7 +31,7 @@ describe('Ionic Angular Slide Box', function() {
 
   it('should register with $ionicSlideBoxDelegate', inject(function($compile, $rootScope, $ionicSlideBoxDelegate) {
     var deregisterSpy = jasmine.createSpy('deregister');
-    spyOn($ionicSlideBoxDelegate, '_registerInstance').andCallFake(function() {
+    spyOn($ionicSlideBoxDelegate, '_registerInstance').and.callFake(function() {
       return deregisterSpy;
     });
     var el = $compile('<ion-slide-box delegate-handle="superHandle">')($rootScope.$new());

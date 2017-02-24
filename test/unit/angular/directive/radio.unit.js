@@ -9,7 +9,7 @@ describe('ionRadio directive', function() {
     timeout = $timeout;
     window = $window;
     ionic.Platform.setPlatform('Android');
-    spyOn(ionic.Platform, 'ready').andCallFake(function(cb) {
+    spyOn(ionic.Platform, 'ready').and.callFake(function(cb) {
       cb();
     });
   }));

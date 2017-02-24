@@ -9,7 +9,7 @@ describe('Ionic Angular Side Menu', function() {
 
   it('should register with $ionicSideMenuDelegate', inject(function($compile, $rootScope, $ionicSideMenuDelegate) {
     var deregisterSpy = jasmine.createSpy('deregister');
-    spyOn($ionicSideMenuDelegate, '_registerInstance').andCallFake(function() {
+    spyOn($ionicSideMenuDelegate, '_registerInstance').and.callFake(function() {
       return deregisterSpy;
     });
     var el = $compile('<ion-side-menus delegate-handle="superHandle">')($rootScope.$new());
@@ -78,7 +78,7 @@ describe('Ionic Angular Side Menu', function() {
     expect(content.offsetX).toEqual(275);
     expect(content.getTranslateX()).toEqual(0);
     expect(content.element.getAttribute('style')).toMatch(/translate3d\(275px, 0(px)?, 0(px)?/);
-    expect(content.element.style.width).toNotEqual('');
+    expect(content.element.style.width).not.toEqual('');
     sideMenuController.exposeAside(false);
     expect(content.element.getAttribute('style')).toMatch(/translate3d\(0(px)?, 0(px)?, 0(px)?/);
     expect(content.getTranslateX()).toEqual(0);

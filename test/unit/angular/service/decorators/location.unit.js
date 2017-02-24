@@ -6,7 +6,7 @@ describe('$location decorator', function() {
 
     it('should find .scroll-content and set scrollTop=0', inject(function($location, $timeout, $rootScope) {
       var scroll = { scrollTop: 5 };
-      spyOn(document, 'querySelector').andCallFake(function() {
+      spyOn(document, 'querySelector').and.callFake(function() {
         return scroll;
       });
 

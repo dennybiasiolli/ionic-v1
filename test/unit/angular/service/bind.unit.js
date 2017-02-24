@@ -6,7 +6,7 @@ describe('$ionicBind', function() {
     $bind = $ionicBind;
     scope = $rootScope.$new();
     attr = {
-      $observe: jasmine.createSpy('observe').andCallFake(function(name, fn) {
+      $observe: jasmine.createSpy('observe').and.callFake(function(name, fn) {
         $observeFn = fn;
       })
     };
@@ -52,7 +52,7 @@ describe('$ionicBind', function() {
 
     it('should unwatch on $destroy', function() {
       var watchUnregister = jasmine.createSpy('watchUnreg');
-      spyOn(scope.$parent, '$watch').andCallFake(function() {
+      spyOn(scope.$parent, '$watch').and.callFake(function() {
         return watchUnregister;
       });
       attr.binding = 'something';

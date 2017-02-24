@@ -12,7 +12,7 @@ describe('Ionic Element Activator', function() {
   });
 
   it('should not active an <a> if ionic.tap.requiresNativeClick is true', function() {
-    spyOn(ionic.tap, 'requiresNativeClick').andReturn(true);
+    spyOn(ionic.tap, 'requiresNativeClick').and.returnValue(true);
     var e = { target: document.createElement('a') };
     ionic.activator.start(e);
     expect(e.target.classList.contains('activated')).toEqual(false);

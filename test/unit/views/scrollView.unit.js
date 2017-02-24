@@ -77,7 +77,7 @@ describe('Scroll View', function() {
 
     ionic.trigger('scrollChildIntoView', details, true);
     //already shrunk, so shouldn't resize again
-    expect(sv.resize.calls.length).toBe(1);
+    expect(sv.resize.calls.count()).toBe(1);
 
     ionic.requestAnimationFrame = _RAF;
     sc.getBoundingClientRect = _scrollGetBoundingClientRect;

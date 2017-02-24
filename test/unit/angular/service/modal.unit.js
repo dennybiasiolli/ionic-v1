@@ -87,7 +87,7 @@ describe('Ionic Modal', function() {
 
   it('should animate leave and destroy scope on remove', inject(function($animate) {
     var instance = modal.fromTemplate('<div class="modal"></div>');
-    spyOn($animate, 'leave').andCallFake(function(el, cb) { cb(); });
+    spyOn($animate, 'leave').and.callFake(function(el, cb) { cb(); });
     spyOn(instance.scope, '$destroy');
     instance.remove();
     timeout.flush();
@@ -97,7 +97,7 @@ describe('Ionic Modal', function() {
   it('Should close on hardware back button by default', inject(function($ionicPlatform) {
     var template = '<div class="modal"></div>';
     var instance = modal.fromTemplate(template);
-    spyOn($ionicPlatform, 'registerBackButtonAction').andCallThrough();
+    spyOn($ionicPlatform, 'registerBackButtonAction').and.callThrough();
     instance.show();
 
     timeout.flush();
@@ -114,7 +114,7 @@ describe('Ionic Modal', function() {
     var instance = modal.fromTemplate(template, {
       hardwareBackButtonClose: false
     });
-    spyOn($ionicPlatform, 'registerBackButtonAction').andCallThrough();
+    spyOn($ionicPlatform, 'registerBackButtonAction').and.callThrough();
     instance.show();
     timeout.flush();
     expect($ionicPlatform.registerBackButtonAction).toHaveBeenCalledWith(
@@ -190,7 +190,7 @@ describe('Ionic Modal', function() {
   it('should broadcast "modal.shown" on show with self', function() {
     var template = '<div class="modal"></div>';
     var instance = modal.fromTemplate(template, {});
-    spyOn(instance.scope.$parent, '$broadcast').andCallThrough();
+    spyOn(instance.scope.$parent, '$broadcast').and.callThrough();
     instance.show();
     timeout.flush();
     expect(instance.scope.$parent.$broadcast).toHaveBeenCalledWith('modal.shown', instance);
@@ -212,7 +212,7 @@ describe('Ionic Modal', function() {
 
     //By the time instance.remove() is done, our scope will be destroyed. so we have to save the modal
     //it gives us
-    spyOn(instance.scope.$parent, '$broadcast').andCallThrough();
+    spyOn(instance.scope.$parent, '$broadcast').and.callThrough();
     spyOn(instance.scope, '$destroy');
 
     instance.remove();
@@ -240,7 +240,7 @@ describe('Ionic Modal', function() {
     instance._isShown = true;
     var done = false;
 
-    spyOn(instance, "hide").andCallThrough();
+    spyOn(instance, "hide").and.callThrough();
 
     instance.remove().then(function() {
       done = true;
@@ -258,7 +258,7 @@ describe('Ionic Modal', function() {
     instance._isShown = false;
     var done = false;
 
-    spyOn(instance, "hide").andCallThrough();
+    spyOn(instance, "hide").and.callThrough();
 
     instance.remove().then(function() {
       done = true;

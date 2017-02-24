@@ -14,7 +14,7 @@ describe('gesture directive', function() {
   .forEach(function(directive){
     it('should compile', inject(function($compile, $rootScope, $ionicGesture) {
       var fakeGesture = {};
-      spyOn($ionicGesture, 'on').andCallFake(function(eventType, listener, el) {
+      spyOn($ionicGesture, 'on').and.callFake(function(eventType, listener, el) {
         callback = listener;
         return fakeGesture;
       });
@@ -24,7 +24,7 @@ describe('gesture directive', function() {
 
       el.scope().foo = jasmine.createSpy('foo');
 
-      expect($ionicGesture.on.mostRecentCall.args[0]).toBe(directive.gestureName);
+      expect($ionicGesture.on.calls.argsFor(0)[0]).toBe(directive.gestureName);
       var event = {};
       callback(event);
       expect(el.scope().foo).toHaveBeenCalledWith(1, event);

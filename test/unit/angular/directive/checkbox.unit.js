@@ -64,7 +64,7 @@ describe('Ionic Checkbox', function() {
     scope.$apply();
     expect(scope.change).toHaveBeenCalledWith(true);
 
-    scope.change.reset();
+    scope.change.calls.reset();
     ngModel.$setViewValue(false);
     scope.$apply();
 

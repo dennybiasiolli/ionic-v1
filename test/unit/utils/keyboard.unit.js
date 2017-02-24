@@ -106,17 +106,21 @@ describe('Ionic Keyboard', function() {
     keyboardPortraitViewportHeight = 0;
     keyboardLandscapeViewportHeight = 0;
 
-    jasmine.Clock.useMock();
+    jasmine.clock().install();
   }));
+
+  afterEach(function() {
+    jasmine.clock().uninstall();
+  });
 
   it('keyboardWaitForResize should set ionic.keyboard.isOpen', function(){
     ionic.keyboard.isOpen = false;
     ionic.Platform.setPlatform('ios');
     keyboardWaitForResize(function(){}, true);
-    jasmine.Clock.tick(100);
+    jasmine.clock().tick(100);
     expect(ionic.keyboard.isOpen).toBe(true);
     keyboardWaitForResize(function(){}, false);
-    jasmine.Clock.tick(100);
+    jasmine.clock().tick(100);
     expect(ionic.keyboard.isOpen).toBe(false);
   });
 
@@ -132,7 +136,7 @@ describe('Ionic Keyboard', function() {
 
     keyboardWaitForResize(function(){}, false);
     window.innerHeight = 268;
-    jasmine.Clock.tick(100);
+    jasmine.clock().tick(100);
 
     expect(window.innerHeight).toBe(268);
     expect(ionic.keyboard.height).toBe(300);
@@ -145,7 +149,7 @@ describe('Ionic Keyboard', function() {
     var spy = jasmine.createSpy();
 
     keyboardWaitForResize(spy, false);
-    jasmine.Clock.tick('100');
+    jasmine.clock().tick('100');
 
     expect(spy).toHaveBeenCalled();
   });
@@ -239,7 +243,7 @@ describe('Ionic Keyboard', function() {
     ionic.keyboard.isOpening = true;
     keyboardActiveElement = document.createElement('input');
     keyboardShow();
-    jasmine.Clock.tick(401);
+    jasmine.clock().tick(401);
     expect(ionic.keyboard.isOpen).toBe(true);
     expect(ionic.keyboard.isOpening).toBe(false);
   });
@@ -251,14 +255,14 @@ describe('Ionic Keyboard', function() {
     ionic.keyboard.height = 300;
 
     var details = keyboardShow();
-    jasmine.Clock.tick(401);
+    jasmine.clock().tick(401);
     expect(details.elementBottom).toBe(0);
     expect(details.windowHeight).toBe(268);
     expect(details.isElementUnderKeyboard).toBe(false); // 0 < 267
 
     keyboardCurrentViewportHeight = 100;
     details = keyboardShow();
-    jasmine.Clock.tick(401);
+    jasmine.clock().tick(401);
     expect(details.elementBottom).toBe(0);
     expect(details.windowHeight).toBe(-200);
     expect(details.isElementUnderKeyboard).toBe(true); // 0 > -200
@@ -273,7 +277,7 @@ describe('Ionic Keyboard', function() {
     scrollView.__container.addEventListener('scrollChildIntoView', scrollView.scrollChildIntoView);
     keyboardActiveElement = element.find('input')[0];
     keyboardShow();
-    jasmine.Clock.tick(401);
+    jasmine.clock().tick(401);
     scrollView.__container.removeEventListener('scrollChildIntoView', scrollView.scrollChildIntoView);
     expect(scrollView.scrollChildIntoView).toHaveBeenCalled();
   });
@@ -284,7 +288,7 @@ describe('Ionic Keyboard', function() {
     keyboardActiveElement = document.createElement('input');
     keyboardShow();
     expect(document.body.classList.contains(KEYBOARD_OPEN_CSS)).toBe(false);
-    jasmine.Clock.tick(401);
+    jasmine.clock().tick(401);
     expect(document.body.classList.contains(KEYBOARD_OPEN_CSS)).toBe(true);
   });
 
@@ -430,7 +434,7 @@ describe('Ionic Keyboard', function() {
     expect(keyboardPortraitViewportHeight).toBe(568);
   });
 
-  it('keyboardUpdateViewportHeight should reset the scroll view', function(done){
+  it('keyboardUpdateViewportHeight should reset the scroll view', function(){
     var element = compile('<ion-scroll><input></ion-scroll>')(scope);
     document.body.appendChild(element[0]);
     scope.$apply();

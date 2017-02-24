@@ -65,7 +65,7 @@ describe('$ionicLoading service', function() {
     }));
 
     it('should use options.templateUrl', inject(function($ionicLoading, $rootScope, $ionicTemplateLoader, $q) {
-      spyOn($ionicTemplateLoader, 'load').andReturn($q.when('{{1}} content'));
+      spyOn($ionicTemplateLoader, 'load').and.returnValue($q.when('{{1}} content'));
       var loader = TestUtil.unwrapPromise($ionicLoading._getLoader());
       loader.show({ templateUrl: 'template.html' });
       expect($ionicTemplateLoader.load).toHaveBeenCalledWith('template.html');
@@ -145,8 +145,8 @@ describe('$ionicLoading service', function() {
   it('hide should cancel show delay and just go ahead and hide', inject(function($ionicLoading, $timeout) {
     ionic.requestAnimationFrame = function(cb) { cb(); };
     var loader = TestUtil.unwrapPromise($ionicLoading._getLoader());
-    spyOn(loader, 'hide').andCallThrough();
-    spyOn(loader, 'show').andCallThrough();
+    spyOn(loader, 'hide').and.callThrough();
+    spyOn(loader, 'show').and.callThrough();
     $ionicLoading.show({ delay: 1000 });
     $ionicLoading.hide();
     expect(loader.show).not.toHaveBeenCalled();
@@ -170,7 +170,7 @@ describe('$ionicLoading service', function() {
     }));
     it('.hide() should deregister back button action', inject(function($ionicLoading, $ionicPlatform, $timeout) {
       var deregisterSpy = jasmine.createSpy('deregister');
-      spyOn($ionicPlatform, 'registerBackButtonAction').andReturn(deregisterSpy);
+      spyOn($ionicPlatform, 'registerBackButtonAction').and.returnValue(deregisterSpy);
       $ionicLoading.show();
       $timeout.flush();
       expect(deregisterSpy).not.toHaveBeenCalled();

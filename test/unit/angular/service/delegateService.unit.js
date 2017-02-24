@@ -58,8 +58,8 @@ describe('DelegateFactory', function() {
     expect(instance1.foo).toHaveBeenCalledWith('a', 'b', 'c');
     expect(instance2.foo).toHaveBeenCalledWith('a', 'b', 'c');
 
-    instance1.foo.reset();
-    instance2.foo.reset();
+    instance1.foo.calls.reset();
+    instance2.foo.calls.reset();
     delegate.foo(1, 2, 3);
     expect(instance1.foo).toHaveBeenCalledWith(1, 2, 3);
     expect(instance2.foo).toHaveBeenCalledWith(1, 2, 3);
@@ -74,10 +74,10 @@ describe('DelegateFactory', function() {
   it('should return the first return value from multiple instances', function() {
     var delegate = setup(['fn']);
     var instance1 = {
-      fn: jasmine.createSpy('fn').andReturn('ret1')
+      fn: jasmine.createSpy('fn').and.returnValue('ret1')
     };
     var instance2 = {
-      fn: jasmine.createSpy('fn').andReturn('ret2')
+      fn: jasmine.createSpy('fn').and.returnValue('ret2')
     };
     var deregister = delegate._registerInstance(instance1);
     delegate._registerInstance(instance2);
@@ -90,10 +90,10 @@ describe('DelegateFactory', function() {
   it('should return the first active instance return value when multiple instances w/ undefined handle', function() {
     var delegate = setup(['fn']);
     var instance1 = {
-      fn: jasmine.createSpy('fn').andReturn('ret1')
+      fn: jasmine.createSpy('fn').and.returnValue('ret1')
     };
     var instance2 = {
-      fn: jasmine.createSpy('fn').andReturn('ret2')
+      fn: jasmine.createSpy('fn').and.returnValue('ret2')
     };
     delegate._registerInstance(instance1, undefined, function() {
       return false;
@@ -109,10 +109,10 @@ describe('DelegateFactory', function() {
   it('should return the first active instance return value when multiple instances w/ same handle', function() {
     var delegate = setup(['fn']);
     var instance1 = {
-      fn: jasmine.createSpy('fn').andReturn('ret1')
+      fn: jasmine.createSpy('fn').and.returnValue('ret1')
     };
     var instance2 = {
-      fn: jasmine.createSpy('fn').andReturn('ret2')
+      fn: jasmine.createSpy('fn').and.returnValue('ret2')
     };
     delegate._registerInstance(instance1, 'myhandle', function() {
       return true;
@@ -130,13 +130,13 @@ describe('DelegateFactory', function() {
     beforeEach(function() {
       delegate = setup(['a']);
       instance1 = {
-        a: jasmine.createSpy('a1').andReturn('a1')
+        a: jasmine.createSpy('a1').and.returnValue('a1')
       };
       instance2 = {
-        a: jasmine.createSpy('a2').andReturn('a2')
+        a: jasmine.createSpy('a2').and.returnValue('a2')
       };
       instance3 = {
-        a: jasmine.createSpy('a3').andReturn('a3')
+        a: jasmine.createSpy('a3').and.returnValue('a3')
       };
     });
 
@@ -161,7 +161,7 @@ describe('DelegateFactory', function() {
       expect(instance2.a).not.toHaveBeenCalled();
       expect(result).toBe('a1');
 
-      instance1.a.reset();
+      instance1.a.calls.reset();
       result = delegate.$getByHandle('2').a(2,3,4);
       expect(instance2.a).toHaveBeenCalledWith(2,3,4);
       expect(instance1.a).not.toHaveBeenCalled();
@@ -184,7 +184,7 @@ describe('DelegateFactory', function() {
       expect(instance3.a).not.toHaveBeenCalled();
       expect(result).toBe('a1');
 
-      instance1.a.reset();
+      instance1.a.calls.reset();
       deregister();
       result = delegateInstance.a(2);
       expect(instance1.a).not.toHaveBeenCalled();

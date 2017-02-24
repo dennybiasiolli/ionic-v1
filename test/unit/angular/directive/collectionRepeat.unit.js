@@ -4,12 +4,12 @@ describe('collectionRepeat', function() {
     $provide.decorator('$$rAF', function($delegate) {
       return function mockRaf(callback) { callback(); };
     });
-    spyOn(ionic, 'animationFrameThrottle').andCallFake(function(cb) {
+    spyOn(ionic, 'animationFrameThrottle').and.callFake(function(cb) {
       return function fakeThrottled() {
         cb.apply(this, arguments);
       };
     });
-    spyOn(ionic, 'debounce').andCallFake(function(cb) { return cb; });
+    spyOn(ionic, 'debounce').and.callFake(function(cb) { return cb; });
   }));
 
   var scrollView;
@@ -192,7 +192,7 @@ describe('collectionRepeat', function() {
 
   describe('automatic dimensions', function() {
     it('should use computed width/height', inject(function($window) {
-      spyOn($window, 'getComputedStyle').andReturn({
+      spyOn($window, 'getComputedStyle').and.returnValue({
         height: '50px',
         width: '50px'
       });
@@ -211,7 +211,7 @@ describe('collectionRepeat', function() {
     }));
 
     it('should error if computed height is 0', inject(function($window) {
-      spyOn($window, 'getComputedStyle').andReturn({
+      spyOn($window, 'getComputedStyle').and.returnValue({
         height: '0px',
         width: '100px'
       });
@@ -221,7 +221,7 @@ describe('collectionRepeat', function() {
     }));
 
     it('should error if computed width is 0', inject(function($window) {
-      spyOn($window, 'getComputedStyle').andReturn({
+      spyOn($window, 'getComputedStyle').and.returnValue({
         height: '100px',
         width: '0px'
       });
@@ -231,7 +231,7 @@ describe('collectionRepeat', function() {
     }));
 
     it('should refresh layout on scrollCtrl.resize', inject(function($timeout, $window) {
-      spyOn($window, 'getComputedStyle').andReturn({
+      spyOn($window, 'getComputedStyle').and.returnValue({
         width: '1px',
         height: '50px'
       });
@@ -303,7 +303,7 @@ describe('collectionRepeat', function() {
 
   describe('vertical static list', function() {
     beforeEach(inject(function($window) {
-      spyOn($window, 'getComputedStyle').andReturn({
+      spyOn($window, 'getComputedStyle').and.returnValue({
         width: '50px',
         height: '50px'
       });

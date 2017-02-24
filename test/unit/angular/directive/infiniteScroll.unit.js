@@ -18,13 +18,13 @@ describe('ionicInfiniteScroll directive', function() {
             scrollingX: true,
             scrollingY: true
           }, options || {}),
-          getValues: jasmine.createSpy('getValues').andCallFake(function() {
+          getValues: jasmine.createSpy('getValues').and.callFake(function() {
             return {
               left: scrollLeftValue,
               top: scrollTopValue
             };
           }),
-          getScrollMax: jasmine.createSpy('getScrollMax').andCallFake(function() {
+          getScrollMax: jasmine.createSpy('getScrollMax').and.callFake(function() {
             return {
               left: scrollLeftMaxValue,
               top: scrollTopMaxValue
@@ -324,12 +324,12 @@ describe('ionicInfiniteScroll directive', function() {
     el.controller('ionInfiniteScroll').__finishInfiniteScroll();
     $timeout.flush();
     expect(el.controller('ionInfiniteScroll').checkBounds).toHaveBeenCalled();
-    expect(el.controller('ionInfiniteScroll').checkBounds.callCount).toBe(2);
+    expect(el.controller('ionInfiniteScroll').checkBounds.calls.count()).toBe(2);
 
     el.controller('ionInfiniteScroll').scrollView.__container = {offsetHeight:0};
     el.controller('ionInfiniteScroll').__finishInfiniteScroll();
     $timeout.flush();
-    expect(el.controller('ionInfiniteScroll').checkBounds.callCount).toBe(2);
+    expect(el.controller('ionInfiniteScroll').checkBounds.calls.count()).toBe(2);
 
   }));
 

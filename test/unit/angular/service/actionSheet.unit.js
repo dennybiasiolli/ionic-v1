@@ -73,7 +73,7 @@ describe('Ionic ActionSheet Service', function() {
 
   it('cancel should removeSheet and call opts.cancel', inject(function($timeout, $animate, $q) {
     var d = $q.defer();
-    spyOn($animate, 'removeClass').andCallFake(function(el, cls) {
+    spyOn($animate, 'removeClass').and.callFake(function(el, cls) {
       el.removeClass(cls);
       return d.promise;
     });
@@ -83,7 +83,7 @@ describe('Ionic ActionSheet Service', function() {
     var scope = setup({
       cancel: cancelSpy
     });
-    spyOn(scope, 'removeSheet').andCallThrough();
+    spyOn(scope, 'removeSheet').and.callThrough();
     scope.cancel();
     $q.flush();
     expect(scope.removeSheet).toHaveBeenCalled();

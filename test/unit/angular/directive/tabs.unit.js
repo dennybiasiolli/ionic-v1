@@ -45,7 +45,7 @@ describe('tabs', function() {
       expect(ctrl.tabs).toEqual([tab1]);
       expect(ctrl.select).toHaveBeenCalledWith(tab1);
 
-      ctrl.select.reset();
+      ctrl.select.calls.reset();
       ctrl.add(tab2);
       expect($ionicHistory.registerHistory).toHaveBeenCalledWith(tab2);
       expect(ctrl.tabs).toEqual([tab1, tab2]);
@@ -91,7 +91,7 @@ describe('tabs', function() {
         $tabSelected: false,
         onDeselect: jasmine.createSpy('deselect')
       };
-      spyOn(ctrl, 'selectedTab').andCallFake(function() {
+      spyOn(ctrl, 'selectedTab').and.callFake(function() {
         return 'foo';
       });
       ctrl.deselect(tab1);
@@ -161,7 +161,7 @@ describe('tabs', function() {
         uiSref: 'drifty'
       };
       var eName, eData;
-      spyOn(scope, '$emit').andCallFake(function(eventName, data) {
+      spyOn(scope, '$emit').and.callFake(function(eventName, data) {
         eName = eventName;
         eData = data;
       });
@@ -212,7 +212,7 @@ describe('tabs', function() {
 
     it('should register with given handle and deregister on destroy', inject(function($ionicTabsDelegate) {
       var deregisterSpy = jasmine.createSpy('deregister');
-      spyOn($ionicTabsDelegate, '_registerInstance').andCallFake(function() {
+      spyOn($ionicTabsDelegate, '_registerInstance').and.callFake(function() {
         return deregisterSpy;
       });
       var el = setup('delegate-handle="banana"');
@@ -263,7 +263,7 @@ describe('tabs', function() {
     }
 
     it('.hrefMatchesState', inject(function($location) {
-      spyOn($location, 'path').andReturn('/a/b/c');
+      spyOn($location, 'path').and.returnValue('/a/b/c');
       var attr = {};
       var ctrl = setup(attr);
 
@@ -295,7 +295,7 @@ describe('tabs', function() {
     }));
 
     it('.srefMatchesState', inject(function($state) {
-      spyOn($state, 'includes').andReturn(111);
+      spyOn($state, 'includes').and.returnValue(111);
       var attr = {};
       var ctrl = setup(attr);
 
@@ -307,14 +307,14 @@ describe('tabs', function() {
       expect(ctrl.srefMatchesState()).toBe(111);
       expect($state.includes).toHaveBeenCalledWith('abc');
 
-      $state.includes.reset();
+      $state.includes.calls.reset();
       attr.uiSref = 'def({ param: "value" })';
       ctrl.srefMatchesState();
       expect($state.includes).toHaveBeenCalledWith('def');
     }));
 
     it('.navNameMatchesState', inject(function($ionicHistory) {
-      spyOn($ionicHistory, 'isCurrentStateNavView').andReturn(123);
+      spyOn($ionicHistory, 'isCurrentStateNavView').and.returnValue(123);
 
       var ctrl = setup();
       expect(ctrl.navNameMatchesState()).toBeFalsy();
@@ -331,7 +331,7 @@ describe('tabs', function() {
       $controllerProvider.register('$ionicTab', function($scope) {
         this.$scope = $scope;
         this.tabMatchesState = jasmine.createSpy('tabMatchesState')
-          .andCallFake(function() {
+          .and.callFake(function() {
             return tabDoesMatch;
           });
       });
@@ -482,7 +482,7 @@ describe('tabs', function() {
       setup('', '<ion-nav-view name="banana"></ion-nav-view>');
       var tabMatchesState = tabEl.controller('ionTab').tabMatchesState;
 
-      tabMatchesState.reset();
+      tabMatchesState.calls.reset();
       spyOn(tabsCtrl, 'select');
       tabDoesMatch = false;
 
@@ -490,7 +490,7 @@ describe('tabs', function() {
       expect(tabMatchesState).toHaveBeenCalled();
       expect(tabsCtrl.select).not.toHaveBeenCalled();
 
-      tabMatchesState.reset();
+      tabMatchesState.calls.reset();
       tabDoesMatch = true;
 
       tabEl.scope().$broadcast('$stateChangeSuccess');
@@ -519,7 +519,7 @@ describe('tabs', function() {
 
       spyOn(tabContent, 'remove');
       spyOn(contentScope, '$destroy');
-      tab.$broadcast.reset();
+      tab.$broadcast.calls.reset();
 
       tab.$apply('$tabSelected = false');
       expect(tabContent.attr('nav-view')).toBe('cached');

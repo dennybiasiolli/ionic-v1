@@ -29,7 +29,7 @@ describe('keyboardAttach directive', function() {
     var keyboardHeight = 33;
     var elHeight = 50;
 
-    spyOn(window, 'keyboardAttachGetClientHeight').andReturn(elHeight);
+    spyOn(window, 'keyboardAttachGetClientHeight').and.returnValue(elHeight);
 
     expect(content.css('bottom')).toEqual('');
     ionic.trigger('native.showkeyboard', { target: window, keyboardHeight: 33 });

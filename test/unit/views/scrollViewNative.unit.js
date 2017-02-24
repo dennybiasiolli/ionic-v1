@@ -47,8 +47,8 @@ describe('Scroll View', function() {
     expect(result).toEqual(false);
     expect(mockEvent.preventDefault).toHaveBeenCalled();
     expect(mockEvent.stopPropagation).toHaveBeenCalled();
-    expect(mockEvent.preventDefault.callCount).toEqual(1);
-    expect(mockEvent.stopPropagation.callCount).toEqual(1);
+    expect(mockEvent.preventDefault.calls.count()).toEqual(1);
+    expect(mockEvent.stopPropagation.calls.count()).toEqual(1);
   });
 
   it('Should prevent default on event when view is frozen', function(){
@@ -66,7 +66,7 @@ describe('Scroll View', function() {
     expect(result).toEqual(false);
     expect(mockEvent.preventDefault).toHaveBeenCalled();
     expect(mockEvent.stopPropagation).not.toHaveBeenCalled();
-    expect(mockEvent.preventDefault.callCount).toEqual(1);
-    expect(mockEvent.stopPropagation.callCount).toEqual(0);
+    expect(mockEvent.preventDefault.calls.count()).toEqual(1);
+    expect(mockEvent.stopPropagation.calls.count()).toEqual(0);
   });
 });

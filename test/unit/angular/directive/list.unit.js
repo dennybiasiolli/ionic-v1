@@ -31,19 +31,20 @@ describe('ionList directive', function() {
     var el = setup('', '<hello></hello>');
     flush();
     expect(window.ionic.onGesture).toHaveBeenCalled();
-    args = window.ionic.onGesture.mostRecentCall.args;
+    args = window.ionic.onGesture.calls.argsFor(0);
     expect(args[3]).toEqual({});
 
+    window.ionic.onGesture.calls.reset();
     var el = setup('class="overflow-scroll"', '<hello></hello>');
     flush();
     var gestureOpts = {prevent_default_directions: ['left','right']};
-    args = window.ionic.onGesture.mostRecentCall.args;
+    args = window.ionic.onGesture.calls.argsFor(0);
     expect(args[3]).toEqual(gestureOpts);
   });
 
   it('should give options to listView after init', function() {
     var options;
-    spyOn(ionic.views, 'ListView').andCallFake(function(o) {
+    spyOn(ionic.views, 'ListView').and.callFake(function(o) {
       options = o;
     });
     var el = setup();
@@ -54,7 +55,7 @@ describe('ionList directive', function() {
     expect(options.scrollEl).toBe(el.controller('$ionicScroll').element);
     expect(options.scrollView).toBe(el.controller('$ionicScroll').scrollView);
 
-    spyOn(el.controller('ionList'), 'canSwipeItems').andReturn('swipey');
+    spyOn(el.controller('ionList'), 'canSwipeItems').and.returnValue('swipey');
     expect(options.canSwipe()).toBe('swipey');
 
     el.scope().$onReorder = jasmine.createSpy('$onReorder');
@@ -124,7 +125,7 @@ describe('ionList directive', function() {
     el.scope().$apply();
 
     expect(el.controller('ionList').canSwipeItems()).toBe(true);
-    expect(el.controller('ionList').closeOptionButtons.callCount).toBe(1);
+    expect(el.controller('ionList').closeOptionButtons.calls.count()).toBe(1);
     var deleteButtons = angular.element(el[0].querySelectorAll('.item-delete.item-left-edit'));
     expect(deleteButtons.length).not.toBe(0);
     expect(el.children().hasClass('list-left-editing')).toBe(false);
@@ -161,7 +162,7 @@ describe('ionList directive', function() {
     el.scope().$apply();
 
     expect(el.controller('ionList').canSwipeItems()).toBe(true);
-    expect(el.controller('ionList').closeOptionButtons.callCount).toBe(1);
+    expect(el.controller('ionList').closeOptionButtons.calls.count()).toBe(1);
     var reorderButtons = angular.element(el[0].querySelectorAll('.item-reorder.item-right-edit'));
     expect(reorderButtons.length).not.toBe(0);
     expect(el.children().hasClass('list-right-editing')).toBe(false);

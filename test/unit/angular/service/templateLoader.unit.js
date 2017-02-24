@@ -2,13 +2,13 @@ describe('$ionicTemplateLoader', function() {
   beforeEach(module('ionic'));
 
   it('.load() should fetch with templateCache and return .data', inject(function($ionicTemplateLoader, $http, $templateCache, $q, $rootScope) {
-    spyOn($http, 'get').andReturn($q.when({
+    spyOn($http, 'get').and.returnValue($q.when({
       data: 'foo'
     }));
     var result = $ionicTemplateLoader.load('test.html');
     expect($http.get).toHaveBeenCalled();
-    expect($http.get.mostRecentCall.args[0]).toBe('test.html');
-    expect($http.get.mostRecentCall.args[1]).toEqual({cache: $templateCache});
+    expect($http.get.calls.argsFor(0)[0]).toBe('test.html');
+    expect($http.get.calls.argsFor(0)[1]).toEqual({cache: $templateCache});
     expect(TestUtil.unwrapPromise(result)).toBe('foo');
   }));
 
@@ -27,7 +27,7 @@ describe('$ionicTemplateLoader', function() {
     }));
 
     it('should compile a templateUrl', inject(function($http, $q) {
-      spyOn($loader, 'load').andReturn($q.when('<span>woah!</span>'));
+      spyOn($loader, 'load').and.returnValue($q.when('<span>woah!</span>'));
       var data = TestUtil.unwrapPromise($loader.compile({
         templateUrl: 'test.html'
       }));

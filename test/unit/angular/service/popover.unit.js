@@ -105,7 +105,7 @@ describe('Ionic Popover', function() {
 
   it('should animate leave and destroy scope on remove', inject(function($animate) {
     var instance = popover.fromTemplate('<div class="popover"></div>');
-    spyOn($animate, 'leave').andCallFake(function(el, cb) { cb(); });
+    spyOn($animate, 'leave').and.callFake(function(el, cb) { cb(); });
     spyOn(instance.scope, '$destroy');
     instance.remove();
     timeout.flush();
@@ -115,7 +115,7 @@ describe('Ionic Popover', function() {
   it('Should close on hardware back button by default', inject(function($ionicPlatform) {
     var template = '<div class="popover"></div>';
     var instance = popover.fromTemplate(template);
-    spyOn($ionicPlatform, 'registerBackButtonAction').andCallThrough();
+    spyOn($ionicPlatform, 'registerBackButtonAction').and.callThrough();
     instance.show();
 
     timeout.flush();
@@ -132,7 +132,7 @@ describe('Ionic Popover', function() {
     var instance = popover.fromTemplate(template, {
       hardwareBackButtonClose: false
     });
-    spyOn($ionicPlatform, 'registerBackButtonAction').andCallThrough();
+    spyOn($ionicPlatform, 'registerBackButtonAction').and.callThrough();
     instance.show();
     timeout.flush();
     expect($ionicPlatform.registerBackButtonAction).toHaveBeenCalledWith(
@@ -208,7 +208,7 @@ describe('Ionic Popover', function() {
   it('should broadcast "popover.shown" on show with self', function() {
     var template = '<div class="popover"></div>';
     var instance = popover.fromTemplate(template, {});
-    spyOn(instance.scope.$parent, '$broadcast').andCallThrough();
+    spyOn(instance.scope.$parent, '$broadcast').and.callThrough();
     instance.show();
     timeout.flush();
     expect(instance.scope.$parent.$broadcast).toHaveBeenCalledWith('popover.shown', instance);
@@ -240,7 +240,7 @@ describe('Ionic Popover', function() {
 
     //By the time instance.remove() is done, our scope will be destroyed. so we have to save the popover
     //it gives us
-    spyOn(instance.scope.$parent, '$broadcast').andCallThrough();
+    spyOn(instance.scope.$parent, '$broadcast').and.callThrough();
     spyOn(instance.scope, '$destroy');
 
     instance.remove();

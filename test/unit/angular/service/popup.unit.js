@@ -39,7 +39,7 @@ describe('$ionicPopup service', function() {
       expect(popupBody.innerText).toBe('Hello, comrade!');
     });
     it('should set .popup-body html to templateUrl option', inject(function($ionicTemplateLoader, $q) {
-      spyOn($ionicTemplateLoader, 'load').andReturn($q.when('Hello, amigo!'));
+      spyOn($ionicTemplateLoader, 'load').and.returnValue($q.when('Hello, amigo!'));
       var popup = TestUtil.unwrapPromise($ionicPopup._createPopup({
         templateUrl: 'hello.html'
       }));
@@ -155,7 +155,7 @@ describe('$ionicPopup service', function() {
     describe('remove', function() {
       it('should hide and then remove the element and destroy the scope', function() {
         var popup = TestUtil.unwrapPromise($ionicPopup._createPopup());
-        spyOn(popup, 'hide').andCallFake(function(cb) {
+        spyOn(popup, 'hide').and.callFake(function(cb) {
           cb();
         });
         popup.show();
@@ -176,7 +176,7 @@ describe('$ionicPopup service', function() {
     });
 
     it('should add popup-open and retain backdrop and register back button action if no previous popup', inject(function($ionicBackdrop, $timeout, $ionicPlatform, IONIC_BACK_PRIORITY) {
-      spyOn($ionicPlatform, 'registerBackButtonAction').andReturn('actionReturn');
+      spyOn($ionicPlatform, 'registerBackButtonAction').and.returnValue('actionReturn');
       spyOn($ionicBackdrop, 'retain');
       $ionicPopup.show();
       $timeout.flush();
@@ -205,7 +205,7 @@ describe('$ionicPopup service', function() {
         show: jasmine.createSpy('show'),
         responseDeferred: $q.defer()
       };
-      spyOn($ionicPopup, '_createPopup').andReturn(fakePopup);
+      spyOn($ionicPopup, '_createPopup').and.returnValue(fakePopup);
       expect($ionicPopup._popupStack.length).toBe(0);
       $ionicPopup.show();
       expect(fakePopup.show).not.toHaveBeenCalled();
@@ -217,7 +217,7 @@ describe('$ionicPopup service', function() {
 
     it('should have close function which resolves promise with argument', inject(function($ionicPopup, $q, $rootScope) {
       var popup = TestUtil.unwrapPromise($ionicPopup._createPopup({template: 'foo'}));
-      spyOn($ionicPopup, '_createPopup').andReturn(popup);
+      spyOn($ionicPopup, '_createPopup').and.returnValue(popup);
      var result = $ionicPopup.show();
       spyOn(popup.responseDeferred, 'resolve');
       result.close('foobar');
@@ -231,7 +231,7 @@ describe('$ionicPopup service', function() {
         remove: jasmine.createSpy('remove'),
         responseDeferred: $q.defer()
       };
-      spyOn($ionicPopup, '_createPopup').andReturn(fakePopup);
+      spyOn($ionicPopup, '_createPopup').and.returnValue(fakePopup);
       var result = $ionicPopup.show();
       $timeout.flush();
       expect(fakePopup.remove).not.toHaveBeenCalled();
@@ -252,7 +252,7 @@ describe('$ionicPopup service', function() {
         show: jasmine.createSpy('show'),
         hide: jasmine.createSpy('hide')
       };
-      spyOn($ionicPopup, '_createPopup').andReturn(fakePopup);
+      spyOn($ionicPopup, '_createPopup').and.returnValue(fakePopup);
       $ionicPopup._popupStack.unshift(previousPopup);
       $ionicPopup.show();
       fakePopup.responseDeferred.resolve();
@@ -267,9 +267,9 @@ describe('$ionicPopup service', function() {
         responseDeferred: $q.defer()
       };
       var backDoneSpy = jasmine.createSpy('backDone');
-      spyOn($ionicPlatform, 'registerBackButtonAction').andReturn(backDoneSpy);
+      spyOn($ionicPlatform, 'registerBackButtonAction').and.returnValue(backDoneSpy);
       spyOn($ionicBackdrop, 'release');
-      spyOn($ionicPopup, '_createPopup').andReturn(fakePopup);
+      spyOn($ionicPopup, '_createPopup').and.returnValue(fakePopup);
       $ionicPopup.show();
       fakePopup.responseDeferred.resolve();
       $timeout.flush();
@@ -279,14 +279,15 @@ describe('$ionicPopup service', function() {
       expect(document.body.classList.contains('popup-open')).toBe(false);
     }));
     it('template should only overwrite prompt input if it includes html', inject(function($timeout, $q) {
-      spyOn($ionicPopup, '_createPopup').andCallThrough();
+      spyOn($ionicPopup, '_createPopup').and.callThrough();
       $ionicPopup.prompt({template: "Tacos!"});
-      params = $ionicPopup._createPopup.mostRecentCall.args;
+      params = $ionicPopup._createPopup.calls.argsFor(0);
       expect(params[0].template.indexOf('<span>Tacos!</span>')).toEqual(0);
       expect(params[0].template.indexOf('<input')).toBeGreaterThan(6);
 
+      $ionicPopup._createPopup.calls.reset();
       $ionicPopup.prompt({template: '<input type="email" />'});
-      params = $ionicPopup._createPopup.mostRecentCall.args;
+      params = $ionicPopup._createPopup.calls.argsFor(0);
       expect(params[0].template.indexOf('<input type="email" />')).toEqual(0);
     }));
   });

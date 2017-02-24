@@ -112,22 +112,22 @@ describe('ionView directive', function() {
     $rootScope.$broadcast('$ionicView.beforeEnter', {});
     var spy = el.data('$ionNavViewController').title;
     expect(spy).not.toHaveBeenCalled();
-    spy.reset();
+    spy.calls.reset();
 
     $rootScope.$broadcast('$ionicView.afterEnter', {});
     expect(spy).not.toHaveBeenCalled();
-    spy.reset();
+    spy.calls.reset();
 
     el.scope().myTitle = 'My New Title';
     $rootScope.$digest();
     expect(spy).toHaveBeenCalledWith('My New Title');
-    spy.reset();
+    spy.calls.reset();
 
     $rootScope.$broadcast('$ionicView.beforeLeave', {});
     el.scope().myTitle = 'My Other New Title';
     $rootScope.$digest();
     expect(spy).not.toHaveBeenCalled();
-    spy.reset();
+    spy.calls.reset();
   }));
 
   it('should only observe title attr after afterEnter and before beforeLeave', inject(function($rootScope) {
@@ -135,22 +135,22 @@ describe('ionView directive', function() {
     $rootScope.$broadcast('$ionicView.beforeEnter', {});
     var spy = el.data('$ionNavViewController').title;
     expect(spy).not.toHaveBeenCalled();
-    spy.reset();
+    spy.calls.reset();
 
     $rootScope.$broadcast('$ionicView.afterEnter', {});
     expect(spy).not.toHaveBeenCalled();
-    spy.reset();
+    spy.calls.reset();
 
     el.scope().myTitle = 'My New Title';
     $rootScope.$digest();
     expect(spy).toHaveBeenCalledWith('My New Title');
-    spy.reset();
+    spy.calls.reset();
 
     $rootScope.$broadcast('$ionicView.beforeLeave', {});
     el.scope().myTitle = 'My Other New Title';
     $rootScope.$digest();
     expect(spy).not.toHaveBeenCalled();
-    spy.reset();
+    spy.calls.reset();
   }));
 
   it('should only observe hideNavBar attr after afterEnter and before beforeLeave', inject(function($rootScope) {
@@ -158,22 +158,22 @@ describe('ionView directive', function() {
     $rootScope.$broadcast('$ionicView.beforeEnter', {});
     var spy = el.data('$ionNavViewController').showBar;
     expect(spy).not.toHaveBeenCalled();
-    spy.reset();
+    spy.calls.reset();
 
     $rootScope.$broadcast('$ionicView.afterEnter', {});
     expect(spy).not.toHaveBeenCalled();
-    spy.reset();
+    spy.calls.reset();
 
     el.scope().hide = true;
     $rootScope.$digest();
     expect(spy).toHaveBeenCalledWith(false);
-    spy.reset();
+    spy.calls.reset();
 
     $rootScope.$broadcast('$ionicView.beforeLeave', {});
     el.scope().hide = false;
     $rootScope.$digest();
     expect(spy).not.toHaveBeenCalled();
-    spy.reset();
+    spy.calls.reset();
   }));
 
   it('should only observe hideBackButton attr after afterEnter and before beforeLeave', inject(function($rootScope) {
@@ -181,22 +181,22 @@ describe('ionView directive', function() {
     $rootScope.$broadcast('$ionicView.beforeEnter', {});
     var spy = el.data('$ionNavViewController').showBackButton;
     expect(spy).not.toHaveBeenCalled();
-    spy.reset();
+    spy.calls.reset();
 
     $rootScope.$broadcast('$ionicView.afterEnter', {});
     expect(spy).not.toHaveBeenCalled();
-    spy.reset();
+    spy.calls.reset();
 
     el.scope().hide = true;
     $rootScope.$digest();
     expect(spy).toHaveBeenCalledWith(false);
-    spy.reset();
+    spy.calls.reset();
 
     $rootScope.$broadcast('$ionicView.beforeLeave', {});
     el.scope().hide = false;
     $rootScope.$digest();
     expect(spy).not.toHaveBeenCalled();
-    spy.reset();
+    spy.calls.reset();
   }));
 
 });
