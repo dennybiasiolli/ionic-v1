@@ -55,6 +55,11 @@ describe('Ionic Viewport', function() {
     ionic.keyboard.isOpen = false;
     viewportProperties = {};
 
+    for (x = document.head.children.length - 1; x >= 0; x--) {
+      if (document.head.children[x].name == 'viewport') {
+        document.head.removeChild(document.head.children[x]);
+      }
+    }
     vportTag = document.createElement('meta');
     vportTag.setAttribute('name', 'viewport');
     document.head.appendChild(vportTag);
