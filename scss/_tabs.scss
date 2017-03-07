@@ -99,9 +99,9 @@
       .badge{
         opacity:$tabs-striped-off-opacity;
       }
-      &.tab-item-active,
-      &.active,
-      &.activated {
+      & .tab-item-active,
+      & .active,
+      & .activated {
         margin-top: -$tabs-striped-border-width;
         color: $color;
         border-style: solid;
@@ -110,11 +110,11 @@
       }
     }
   }
-  &.tabs-top{
+  & .tabs-top{
     .tab-item {
-      &.tab-item-active,
-      &.active,
-      &.activated {
+      & .tab-item-active,
+      & .active,
+      & .activated {
         .badge {
           top: 4%;
         }
@@ -151,9 +151,9 @@
       .badge{
         opacity:$tabs-off-opacity;
       }
-      &.tab-item-active,
-      &.active,
-      &.activated {
+      & .tab-item-active,
+      & .active,
+      & .activated {
         color: $color;
         border: 0 solid $color;
         .badge{
@@ -172,9 +172,9 @@
       .badge{
         opacity:$tabs-striped-off-opacity;
       }
-      &.tab-item-active,
-      &.active,
-      &.activated {
+      & .tab-item-active,
+      & .active,
+      & .activated {
         margin-top: -$tabs-striped-border-width;
         color: $color;
         border: 0 solid $color;
@@ -268,9 +268,9 @@
   &.#{$style} {
     .tab-item {
       color: $off-color;
-      &.tab-item-active,
-      &.active,
-      &.activated {
+      & .tab-item-active,
+      & .active,
+      & .activated {
         color: $color;
       }
     }
@@ -279,9 +279,9 @@
 
   &.tabs-striped.#{$style} {
     .tab-item {
-      &.tab-item-active,
-      &.active,
-      &.activated {
+      & .tab-item-active,
+      & .active,
+      & .activated {
         border-color: $color;
         color: $color;
       }
@@ -441,7 +441,7 @@ ion-tabs {
     vertical-align: top;
     margin-top: -.1em;
 
-    &:before {
+    & :before {
     font-size: $tabs-icon-size - 8;
     line-height: $tabs-height;
     }

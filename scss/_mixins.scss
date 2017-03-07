@@ -8,12 +8,12 @@
   color: $color;
 
   // Give desktop users something to play with
-  &:hover {
+  & :hover {
     color: $color;
     text-decoration: none;
   }
-  &.active,
-  &.activated {
+  & .active,
+  & .activated {
     @if $active-border-color != ""{
       border-color: $active-border-color;
     }
@@ -23,7 +23,7 @@
 }
 
 @mixin button-clear($color, $font-size:"") {
-  &.button-clear {
+  & .button-clear {
     border-color: transparent;
     background: none;
     box-shadow: none;
@@ -33,22 +33,22 @@
       font-size: $font-size;
     }
   }
-  &.button-icon {
+  & .button-icon {
     border-color: transparent;
     background: none;
   }
 }
 
 @mixin button-outline($color, $text-color:"") {
-  &.button-outline {
+  & .button-outline {
     border-color: $color;
     background: transparent;
     @if $text-color == "" {
       $text-color: $color;
     }
     color: $text-color;
-    &.active,
-    &.activated {
+    & .active,
+    & .activated {
       background-color: $color;
       box-shadow: none;
       color: #fff;
@@ -102,7 +102,7 @@
 @mixin item-active-style($active-bg-color, $active-border-color) {
   border-color: $active-border-color;
   background-color: $active-bg-color;
-  &.item-complex > .item-content {
+  & .item-complex > .item-content {
     border-color: $active-border-color;
     background-color: $active-bg-color;
   }
@@ -122,10 +122,10 @@
 // --------------------------------------------------
 
 @mixin range-style($track-bg-color) {
-  &::-webkit-slider-thumb:before {
+  & ::-webkit-slider-thumb:before {
     background: $track-bg-color;
   }
-  &::-ms-fill-lower{
+  & ::-ms-fill-lower{
     background: $track-bg-color;
   }
 }
@@ -175,13 +175,13 @@
 
 @mixin clearfix {
   *zoom: 1;
-  &:before,
-  &:after {
+  & :before,
+  & :after {
     display: table;
     content: "";
     line-height: 0;
   }
-  &:after {
+  & :after {
     clear: both;
   }
 }
@@ -191,13 +191,13 @@
 // --------------------------------------------------
 
 @mixin placeholder($color: $input-color-placeholder, $text-indent: 0) {
-  &::-moz-placeholder { // Firefox 19+
+  & ::-moz-placeholder { // Firefox 19+
     color: $color;
   }
-  &:-ms-input-placeholder {
+  & :-ms-input-placeholder {
     color: $color;
   }
-  &::-webkit-input-placeholder {
+  & ::-webkit-input-placeholder {
     color: $color;
     // Safari placeholder margin issue
     text-indent: $text-indent;

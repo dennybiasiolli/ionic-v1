@@ -50,7 +50,7 @@ h3, .h3 {
   margin-top: $line-height-computed;
   margin-bottom: ($line-height-computed / 2);
 
-  &:first-child {
+  & :first-child {
     margin-top: 0;
   }
 

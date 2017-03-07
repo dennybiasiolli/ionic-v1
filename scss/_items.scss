@@ -117,31 +117,31 @@
   @include item-active-style($item-default-active-bg, $item-default-active-border);
 
   // Different active themes for <a> and <button> items
-  &.item-light {
+  & .item-light {
     @include item-active-style($item-light-active-bg, $item-light-active-border);
   }
-  &.item-stable {
+  & .item-stable {
     @include item-active-style($item-stable-active-bg, $item-stable-active-border);
   }
-  &.item-positive {
+  & .item-positive {
     @include item-active-style($item-positive-active-bg, $item-positive-active-border);
   }
-  &.item-calm {
+  & .item-calm {
     @include item-active-style($item-calm-active-bg, $item-calm-active-border);
   }
-  &.item-assertive {
+  & .item-assertive {
     @include item-active-style($item-assertive-active-bg, $item-assertive-active-border);
   }
-  &.item-balanced {
+  & .item-balanced {
     @include item-active-style($item-balanced-active-bg, $item-balanced-active-border);
   }
-  &.item-energized {
+  & .item-energized {
     @include item-active-style($item-energized-active-bg, $item-energized-active-border);
   }
-  &.item-royal {
+  & .item-royal {
     @include item-active-style($item-royal-active-bg, $item-royal-active-border);
   }
-  &.item-dark {
+  & .item-dark {
     @include item-active-style($item-dark-active-bg, $item-dark-active-border);
   }
 }
