@@ -106,7 +106,7 @@ module.exports = function(gulp, argv) {
       '--params.height=<%= params.height %>',
       '--params.test_id=<%= params.test_id %>',
     ].map(function(argument) {
-      return _.template(argument, snapshotValues);
+      return _.template(argument)(snapshotValues);
     });
 
     return protractor(done, [configFile].concat(protractorArgs));

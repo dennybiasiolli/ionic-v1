@@ -27,7 +27,7 @@ module.exports = {
         config.get('buildConfig.protractorPort') + '/' + path.join(
           config.demoFolderPrefix || '',
           config.versionData.current.folder,
-          _.template(assetOutputPath, _.assign({},doc,{fileName:''}))
+          _.template(assetOutputPath)(_.assign({},doc,{fileName:''}))
         );
         return doc;
       }
@@ -57,7 +57,7 @@ module.exports = {
           doc.extension = doc.fileType.replace(/^\./,'');
 
           doc.template = templates[doc.fileType] || 'asset.contents.template',
-          doc.outputPath = path.join(contentsFolder, _.template(assetOutputPath, doc));
+          doc.outputPath = path.join(contentsFolder, _.template(assetOutputPath)(doc));
 
           doc = (transform[doc.fileType] || _.identity)(doc);
 
@@ -69,13 +69,13 @@ module.exports = {
 
         var indexOutputPath = path.join(
           contentsFolder,
-          _.template(assetOutputPath, _.assign({}, firstDoc, {
+          _.template(assetOutputPath)(_.assign({}, firstDoc, {
             fileName: 'index.html'
           }))
         );
         var appOutputPath = path.join(
           contentsFolder,
-          _.template(assetOutputPath, _.assign({}, firstDoc, {
+          _.template(assetOutputPath)(_.assign({}, firstDoc, {
             fileName: 'index-ionic-demo-app.js'
           }, demoData))
         );
@@ -88,7 +88,7 @@ module.exports = {
         demoData.href = path.join(
           '/',
           contentsFolder,
-          _.template(assetOutputPath, _.assign({}, firstDoc, { fileName: '' }))
+          _.template(assetOutputPath)(_.assign({}, firstDoc, { fileName: '' }))
         );
 
         pages.push({

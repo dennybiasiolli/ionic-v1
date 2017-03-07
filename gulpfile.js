@@ -37,7 +37,7 @@ var template = require('gulp-template');
 var uglify = require('gulp-uglify');
 var gutil = require('gulp-util');
 
-var banner = _.template(buildConfig.banner, { pkg: pkg });
+var banner = _.template(buildConfig.banner)({ pkg: pkg });
 
 var IS_RELEASE_BUILD = !!argv.release;
 if (IS_RELEASE_BUILD) {
