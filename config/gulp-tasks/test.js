@@ -4,7 +4,7 @@ var connect = require('connect');
 var cp = require('child_process');
 var gutil = require('gulp-util');
 var http = require('http');
-var karma = require('karma').server;
+var Server = require('karma').Server;
 var path = require('canonical-path');
 var uuid = require('uuid');
 
@@ -51,17 +51,20 @@ module.exports = function(gulp, argv) {
 
   gulp.task('karma', function(done) {
     karmaConf.singleRun = true;
-    karma.start(karmaConf, done);
+    var server = new Server(karmaConf, done);
+    server.start();
   });
 
   gulp.task('karma-watch', function(done) {
     karmaConf.singleRun = false;
-    karma.start(karmaConf, done);
+    var server = new Server(karmaConf, done);
+    server.start();
   });
 
   gulp.task('karma-sauce', ['run-karma-sauce'], sauceDisconnect);
   gulp.task('run-karma-sauce', ['sauce-connect'], function(done) {
-    return karma.start(karmaSauceConf, done);
+    var server = new Server(karmaSauceConf, done);
+    return server.start();
   });
 
 
