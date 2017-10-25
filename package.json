@@ -10,7 +10,7 @@
     "bower": "^1.8.0",
     "canonical-path": "0.0.2",
     "chalk": "^0.4.0",
-    "connect": "^2.13.0",
+    "connect": "^3.6.5",
     "conventional-changelog": "^1.1.0",
     "cpr": "^2.2.0",
     "dgeni": "0.4.0",
